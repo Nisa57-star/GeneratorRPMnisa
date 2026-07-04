@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Modul Ajar — Pembelajaran Mendalam</title>
+<style>
+  :root{
+    --ink:#1f2a24;
+    --paper:#f7f5ef;
+    --line:#d8d2c2;
+    --moss:#3c5a45;
+    --moss-dark:#28402f;
+    --clay:#a8633c;
+    --clay-soft:#f0e2d4;
+    --muted:#6e7268;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Georgia','Iowan Old Style',serif;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .utility{font-family:'Helvetica Neue',Arial,sans-serif;}
+  header.top{
+    padding:28px 32px 20px;
+    border-bottom:2px solid var(--moss);
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  header.top h1{
+    margin:0;
+    font-size:26px;
+    letter-spacing:0.2px;
+    color:var(--moss-dark);
+  }
+  header.top .eyebrow{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--clay);
+    font-weight:600;
+  }
+  header.top .sub{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12.5px;
+    color:var(--muted);
+    max-width:380px;
+    text-align:right;
+  }
+  .layout{
+    display:grid;
+    grid-template-columns:minmax(360px,440px) 1fr;
+    gap:0;
+    min-height:calc(100vh - 96px);
+  }
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr;}
+  }
+  .panel-form{
+    padding:26px 28px 60px;
+    border-right:1px solid var(--line);
+    background:#fbfaf6;
+  }
+  .panel-result{
+    padding:26px 32px 60px;
+    overflow-x:auto;
+  }
+  fieldset{
+    border:none;
+    margin:0 0 22px;
+    padding:0;
+  }
+  legend{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11px;
+    letter-spacing:1.6px;
+    text-transform:uppercase;
+    color:var(--moss);
+    font-weight:700;
+    margin-bottom:10px;
+    padding-bottom:6px;
+    border-bottom:1px solid var(--line);
+    width:100%;
+  }
+  label{
+    display:block;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12.5px;
+    color:var(--ink);
+    margin:12px 0 4px;
+    font-weight:600;
+  }
+  label .opt{
+    color:var(--muted);
+    font-weight:400;
+    font-style:italic;
+  }
+  input[type=text], input[type=number], select, textarea{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:#fff;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:13.5px;
+    color:var(--ink);
+  }
+  textarea{resize:vertical;min-height:54px;}
+  input:focus, select:focus, textarea:focus{
+    outline:2px solid var(--moss);
+    outline-offset:1px;
+  }
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .dims{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px 10px;
+    margin-top:8px;
+  }
+  .dims label{
+    display:flex;
+    align-items:flex-start;
+    gap:6px;
+    font-weight:400;
+    margin:0;
+    font-size:12.5px;
+    cursor:pointer;
+    line-height:1.3;
+  }
+  .dims input{width:auto;margin-top:2px;}
+  .helptext{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11px;
+    color:var(--muted);
+    margin-top:3px;
+  }
+  button.primary{
+    margin-top:10px;
+    width:100%;
+    padding:13px;
+    background:var(--moss);
+    color:#fff;
+    border:none;
+    border-radius:3px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    letter-spacing:0.4px;
+    cursor:pointer;
+    transition:background 0.15s;
+  }
+  button.primary:hover{background:var(--moss-dark);}
+  button.primary:disabled{background:#9aa79e;cursor:not-allowed;}
+  .actions{
+    display:flex;
+    gap:10px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .actions button{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:3px;
+    border:1px solid var(--moss);
+    background:#fff;
+    color:var(--moss-dark);
+    cursor:pointer;
+  }
+  .actions button:hover{background:var(--clay-soft);}
+  .actions button:disabled{opacity:0.4;cursor:not-allowed;}
+  .doctabs{
+    display:none;
+    gap:6px;
+    margin-bottom:14px;
+    border-bottom:1px solid var(--line);
+  }
+  .doctabs.show{display:flex;}
+  .tabbtn{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:9px 18px;
+    background:none;
+    border:none;
+    border-bottom:3px solid transparent;
+    color:var(--muted);
+    cursor:pointer;
+  }
+  .tabbtn.active{color:var(--moss-dark);border-bottom-color:var(--moss);}
+  .tabbtn:hover{color:var(--moss-dark);}
+  #doc .materi-content p{margin:0 0 12px;}
+  #doc .materi-content h5{
+    font-size:13.5px;
+    color:var(--clay);
+    margin:18px 0 6px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+  }
+  #doc .materi-content ul{margin:6px 0 12px 20px;}
+  .placeholder{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    color:var(--muted);
+    font-size:13.5px;
+    padding:60px 20px;
+    text-align:center;
+    border:1px dashed var(--line);
+    border-radius:4px;
+  }
+  .status{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:13px;
+    color:var(--moss-dark);
+    padding:14px 0;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .spinner{
+    width:14px;height:14px;
+    border:2px solid var(--line);
+    border-top-color:var(--moss);
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .error-box{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:13px;
+    background:#fbe7e2;
+    border:1px solid #cf6346;
+    color:#7a2c17;
+    padding:12px 14px;
+    border-radius:4px;
+    margin-bottom:14px;
+  }
+
+  /* Document preview styling */
+  #doc{
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    padding:50px 56px;
+    max-width:760px;
+    margin:0 auto;
+    font-size:14.5px;
+    line-height:1.6;
+  }
+  #doc h2.doctitle{
+    text-align:center;
+    font-size:19px;
+    color:var(--moss-dark);
+    margin:0 0 4px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  #doc .docsub{
+    text-align:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--clay);
+    margin-bottom:26px;
+  }
+  #doc h3{
+    font-size:14.5px;
+    background:var(--moss);
+    color:#fff;
+    padding:6px 12px;
+    margin:26px 0 12px;
+    border-radius:2px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    font-size:11.5px;
+  }
+  #doc h4{
+    font-size:14px;
+    color:var(--moss-dark);
+    margin:18px 0 8px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:4px;
+  }
+  #doc table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:14px;
+    font-size:13.5px;
+  }
+  #doc table.identity td{
+    padding:4px 8px;
+    vertical-align:top;
+  }
+  #doc table.identity td.k{
+    width:200px;
+    color:var(--muted);
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12.5px;
+  }
+  #doc table.gridtable th, #doc table.gridtable td{
+    border:1px solid #ccc;
+    padding:7px 9px;
+    text-align:left;
+    vertical-align:top;
+  }
+  #doc table.gridtable{
+    border:1px solid #ccc;
+  }
+  #doc table.gridtable th{
+    background:var(--clay-soft);
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+  }
+  #doc ul, #doc ol{margin:6px 0 12px 20px;padding:0;}
+  #doc li{margin-bottom:5px;}
+  table.signtable{
+    width:100%;
+    margin-top:46px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:13px;
+    border:none;
+  }
+  table.signtable td{
+    border:none;
+    padding:4px 10px;
+    vertical-align:top;
+  }
+
+  @media print{
+    header.top, .panel-form, .actions, .doctabs{display:none !important;}
+    .layout{grid-template-columns:1fr;}
+    .panel-result{padding:0;}
+    #doc{box-shadow:none;border:none;max-width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <div class="eyebrow">Pembelajaran Mendalam · CP BSKAP 046/2025</div>
+    <h1>Generator Modul Ajar</h1>
+  </div>
+  <div class="sub">Isi formulir di sebelah kiri, lalu hasilkan modul ajar lengkap berbasis prinsip pembelajaran mendalam (deep learning) untuk diunduh sebagai Word atau PDF.</div>
+</header>
+
+<div class="layout">
+  <div class="panel-form">
+
+    <fieldset>
+      <legend>Identitas Umum</legend>
+      <div class="row2">
+        <div><label>Nama Guru</label><input type="text" id="namaGuru" placeholder="cth. Siti Aminah, S.Pd."></div>
+        <div><label>NIP Guru <span class="opt">opsional</span></label><input type="text" id="nipGuru" placeholder="cth. 198501012010012001"></div>
+      </div>
+      <div class="row2">
+        <div><label>Nama Sekolah</label><input type="text" id="namaSekolah" placeholder="cth. SMP Negeri 1 Cendekia"></div>
+        <div></div>
+      </div>
+      <div class="row2">
+        <div><label>Nama Kepala Sekolah</label><input type="text" id="namaKepsek" placeholder="cth. Drs. Budi Santoso, M.Pd."></div>
+        <div><label>NIP Kepala Sekolah <span class="opt">opsional</span></label><input type="text" id="nipKepsek" placeholder="cth. 197003031995011001"></div>
+      </div>
+      <div class="row2">
+        <div><label>Mata Pelajaran</label><input type="text" id="mapel" placeholder="cth. Ilmu Pengetahuan Alam"></div>
+        <div>
+          <label>Jenjang</label>
+          <select id="jenjang">
+            <option value="">— Pilih —</option>
+            <option>SD/MI</option><option>SMP/MTs</option><option>SMA/MA</option><option>SMK/MAK</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <div><label>Kelas</label><input type="text" id="kelas" placeholder="cth. VII"></div>
+        <div></div>
+      </div>
+      <div class="row2">
+        <div>
+          <label>Fase</label>
+          <select id="fase">
+            <option value="">— Pilih —</option>
+            <option>Fase A</option><option>Fase B</option><option>Fase C</option>
+            <option>Fase D</option><option>Fase E</option><option>Fase F</option>
+          </select>
+        </div>
+        <div>
+          <label>Semester</label>
+          <select id="semester">
+            <option value="">— Pilih —</option>
+            <option>Ganjil</option><option>Genap</option>
+          </select>
+        </div>
+      </div>
+      <label>Alokasi Waktu</label>
+      <input type="text" id="alokasiWaktu" placeholder="cth. 3 x 40 menit (1 pertemuan)">
+    </fieldset>
+
+    <fieldset>
+      <legend>Materi & Capaian</legend>
+      <label>Topik Pembelajaran</label>
+      <input type="text" id="topik" placeholder="cth. Siklus Air dan Pelestariannya">
+      <label>Capaian Pembelajaran (CP) <span class="opt">opsional — kosongkan agar disusun otomatis</span></label>
+      <textarea id="cp" placeholder="Tempel rumusan CP dari mapel/fase terkait bila sudah ada"></textarea>
+      <label>Tujuan Pembelajaran (TP) <span class="opt">opsional — kosongkan agar disusun otomatis dari CP & topik</span></label>
+      <textarea id="tp" placeholder="Tempel TP bila sudah disusun sebelumnya"></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Dimensi Profil Lulusan <span class="opt" style="font-weight:400">(pilih minimal 2)</span></legend>
+      <div class="dims" id="dimsWrap">
+        <label><input type="checkbox" value="Keimanan dan Ketakwaan terhadap Tuhan Yang Maha Esa"> Keimanan & Ketakwaan terhadap Tuhan YME</label>
+        <label><input type="checkbox" value="Kewargaan"> Kewargaan</label>
+        <label><input type="checkbox" value="Penalaran Kritis"> Penalaran Kritis</label>
+        <label><input type="checkbox" value="Kreativitas"> Kreativitas</label>
+        <label><input type="checkbox" value="Kolaborasi"> Kolaborasi</label>
+        <label><input type="checkbox" value="Kemandirian"> Kemandirian</label>
+        <label><input type="checkbox" value="Kesehatan"> Kesehatan</label>
+        <label><input type="checkbox" value="Komunikasi"> Komunikasi</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Desain Pembelajaran</legend>
+      <label>Praktik Pedagogis <span class="opt">opsional — kosongkan agar Pendekatan, Model, dan Metode Pembelajaran disusun otomatis sesuai Tujuan Pembelajaran</span></label>
+      <input type="text" id="praktik" placeholder="cth. Problem Based Learning dipadukan Project Based Learning">
+      <div class="helptext" style="margin-top:-2px">Jika diisi, AI akan tetap menyusun rincian Pendekatan/Model/Metode berdasarkan preferensi ini.</div>
+      <label>Kemitraan <span class="opt">opsional</span></label>
+      <input type="text" id="kemitraan" placeholder="cth. Orang tua, dinas lingkungan hidup, komunitas, dll.">
+    </fieldset>
+
+    <fieldset>
+      <legend>Konfigurasi Soal Asesmen Sumatif</legend>
+      <div class="row2">
+        <div>
+          <label>Bentuk Soal</label>
+          <select id="bentukSoalSumatif">
+            <option value="Pilihan Ganda">Pilihan Ganda (4 opsi A-D)</option>
+            <option value="Uraian">Uraian</option>
+            <option value="Isian Singkat">Isian Singkat</option>
+            <option value="Campuran (Pilihan Ganda + Uraian)">Campuran (Pilihan Ganda + Uraian)</option>
+          </select>
+        </div>
+        <div>
+          <label>Jumlah Soal</label>
+          <input type="number" id="jumlahSoalSumatif" value="5" min="1" max="20">
+        </div>
+      </div>
+      <label>Proporsi Tingkat Kesulitan</label>
+      <select id="tingkatKesulitanSumatif">
+        <option value="Proporsional (mudah, sedang, sukar merata)">Proporsional (Mudah-Sedang-Sukar merata)</option>
+        <option value="Didominasi tingkat Sedang">Didominasi tingkat Sedang</option>
+        <option value="Bertahap naik dari Mudah ke Sukar">Bertahap naik dari Mudah ke Sukar</option>
+      </select>
+    </fieldset>
+
+    <div id="errorBox"></div>
+    <button class="primary" id="generateBtn" onclick="generateModul()">✦ Hasilkan Modul Ajar</button>
+    <div id="statusBox"></div>
+  </div>
+
+  <div class="panel-result">
+    <div class="doctabs" id="docTabs">
+      <button class="tabbtn active" data-tab="modul" onclick="switchTab('modul')">📘 Modul Ajar</button>
+      <button class="tabbtn" data-tab="lampiran" onclick="switchTab('lampiran')">📎 Lampiran Lengkap</button>
+    </div>
+    <div class="actions">
+      <button id="btnPrint" onclick="window.print()" disabled>🖨️ Cetak/PDF (tab aktif)</button>
+      <button id="btnWordModul" onclick="downloadWord('modul')" disabled>📄 Unduh Modul Ajar (.doc)</button>
+      <button id="btnWordLampiran" onclick="downloadWord('lampiran')" disabled>📎 Unduh Lampiran (.doc)</button>
+      <button id="btnWordGabungan" onclick="downloadWord('gabungan')" disabled>📚 Unduh Gabungan (.doc)</button>
+      <button id="btnRegen" onclick="generateModul()" disabled>↻ Hasilkan Ulang</button>
+    </div>
+    <div id="resultWrap">
+      <div class="placeholder">Dokumen modul ajar akan muncul di sini setelah formulir diisi dan tombol "Hasilkan Modul Ajar" ditekan.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+let lastModulHTML = "";
+let lastLampiranHTML = "";
+let lastTitleModul = "Modul Ajar";
+let lastTitleLampiran = "Lampiran Modul Ajar";
+let activeTab = "modul";
+
+function val(id){ return document.getElementById(id).value.trim(); }
+
+function getSelectedDimensions(){
+  return Array.from(document.querySelectorAll('#dimsWrap input:checked')).map(i => i.value);
+}
+
+function validateForm(){
+  const required = [
+    ['namaGuru','Nama Guru'], ['namaSekolah','Nama Sekolah'], ['namaKepsek','Nama Kepala Sekolah'], ['mapel','Mata Pelajaran'], ['jenjang','Jenjang'],
+    ['kelas','Kelas'], ['fase','Fase'], ['semester','Semester'],
+    ['alokasiWaktu','Alokasi Waktu'], ['topik','Topik Pembelajaran']
+  ];
+  const missing = required.filter(([id]) => !val(id)).map(([,label]) => label);
+  if (getSelectedDimensions().length < 2) missing.push('Dimensi Profil Lulusan (minimal 2)');
+  return missing;
+}
+
+function setLoading(loading){
+  document.getElementById('generateBtn').disabled = loading;
+  document.getElementById('statusBox').innerHTML = loading
+    ? '<div class="status"><div class="spinner"></div> Menyusun modul ajar... ini bisa memakan waktu hingga satu menit.</div>'
+    : '';
+}
+
+async function generateModul(){
+  const errorBox = document.getElementById('errorBox');
+  errorBox.innerHTML = '';
+  const missing = validateForm();
+  if (missing.length){
+    errorBox.innerHTML = `<div class="error-box">Mohon lengkapi: ${missing.join(', ')}.</div>`;
+    return;
+  }
+
+  const data = {
+    namaGuru: val('namaGuru'), nipGuru: val('nipGuru'), namaSekolah: val('namaSekolah'), namaKepsek: val('namaKepsek'), nipKepsek: val('nipKepsek'), mapel: val('mapel'), jenjang: val('jenjang'),
+    kelas: val('kelas'), fase: val('fase'), semester: val('semester'),
+    alokasiWaktu: val('alokasiWaktu'), topik: val('topik'), cp: val('cp'), tp: val('tp'),
+    dimensi: getSelectedDimensions(), praktik: val('praktik'), kemitraan: val('kemitraan'),
+    bentukSoalSumatif: val('bentukSoalSumatif'), jumlahSoalSumatif: val('jumlahSoalSumatif') || '5', tingkatKesulitanSumatif: val('tingkatKesulitanSumatif')
+  };
+
+  setLoading(true);
+  document.getElementById('btnPrint').disabled = true;
+  document.getElementById('btnWordModul').disabled = true;
+  document.getElementById('btnWordLampiran').disabled = true;
+  document.getElementById('btnWordGabungan').disabled = true;
+  document.getElementById('btnRegen').disabled = true;
+
+  const systemPrompt = `Anda adalah asisten ahli kurikulum yang menyusun Modul Ajar berbasis Pembelajaran Mendalam (Deep Learning) sesuai Capaian Pembelajaran BSKAP Nomor 046 Tahun 2025, Kurikulum Indonesia. Anda akan menerima data isian guru dan harus mengembalikan HANYA JSON valid (tanpa markdown, tanpa backtick, tanpa teks pembuka/penutup) dengan struktur berikut. Semua isi harus konkret, kontekstual dengan topik yang diberikan, menggunakan bahasa Indonesia baku, dan menerapkan tiga prinsip pembelajaran mendalam: berkesadaran (mindful), bermakna (meaningful), dan menggembirakan (joyful). Tahapan pengalaman belajar mengikuti alur: Memahami, Mengaplikasi, Merefleksi.
+
+Struktur JSON yang harus dikembalikan:
+{
+  "cp": "rumusan capaian pembelajaran yang relevan (jika input CP kosong, susun sendiri secara wajar untuk fase dan topik tersebut)",
+  "tp": ["tujuan pembelajaran 1", "tujuan pembelajaran 2", "..."],
+  "praktikPedagogis": {"pendekatan": "nama pendekatan pembelajaran, mis. Deep Learning / Pembelajaran Mendalam", "model": "nama model pembelajaran yang paling sesuai dengan TP dan topik, mis. Problem Based Learning, Project Based Learning, Inquiry Based Learning, atau gabungan dua model", "metode": "satu atau lebih metode pembelajaran konkret, mis. diskusi, tanya jawab, demonstrasi, eksperimen"},
+  "asesmenAwal": {"teknik": "...", "instrumenSingkat": ["pertanyaan/kegiatan diagnostik 1","2","3"]},
+  "lingkunganPembelajaran": "deskripsi singkat penataan kelas/lingkungan belajar yang mendukung topik",
+  "pemanfaatanDigital": "deskripsi pemanfaatan teknologi/digital yang relevan dan realistis (boleh sederhana jika topik tidak memerlukan teknologi tinggi)",
+  "lintasDisiplinIlmu": "deskripsi keterkaitan topik ini dengan mata pelajaran lain di kelas/jenjang yang sama (sebutkan mata pelajaran lain yang relevan dan bentuk keterkaitannya)",
+  "alokasiKegiatan": {"pembuka":"perkiraan alokasi waktu kegiatan pembuka dalam menit, mis. '10 menit'", "inti":"perkiraan alokasi waktu kegiatan inti, mis. '50 menit'", "penutup":"perkiraan alokasi waktu kegiatan penutup, mis. '10 menit'"},
+  "kegiatanPembuka": [{"aktivitas":"deskripsi rinci langkah konkret yang dilakukan guru/siswa", "waktu":"perkiraan waktu aktivitas ini, mis. '5 menit'", "sintak":"nama tahapan sintak model/metode pembelajaran yang dipilih guru, mis. 'Orientasi Masalah' untuk PBL", "tahap":"Memahami/Mengaplikasi/Merefleksi", "prinsip":"berkesadaran/bermakna/menggembirakan (boleh gabungan)"}],
+  "kegiatanInti": [{"aktivitas":"...", "waktu":"...", "sintak":"...", "tahap":"...", "prinsip":"..."}],
+  "kegiatanPenutup": [{"aktivitas":"...", "waktu":"...", "sintak":"...", "tahap":"...", "prinsip":"..."}],
+  "asesmenFormatif": {"teknik":"...", "instrumen":"..."},
+  "asesmenSumatif": {"teknik":"...", "instrumen":"...", "bentukSoal":"sesuai konfigurasi guru", "soalSumatif":[{"soal":"teks butir soal, konkret dan sesuai TP", "tingkat":"Mudah/Sedang/Sukar", "opsi":["A. ...","B. ...","C. ...","D. ..."]}], "kunciJawabanSumatif":["untuk Pilihan Ganda cukup huruf jawaban benar (mis. 'B'); untuk Uraian/Isian Singkat tulis kunci jawaban singkat"]},
+  "konversiNilai": "deskripsi singkat skema konversi nilai/skor ke predikat (mis. rentang skor 0-100 ke kategori)",
+  "bahanAjar": ["daftar bahan ajar yang digunakan, mis. buku teks, modul, artikel, gambar/poster - 2 sampai 4 butir"],
+  "mediaPembelajaran": ["daftar media/alat pembelajaran yang digunakan, mis. proyektor, LKPD cetak, video, alat peraga - 2 sampai 4 butir"],
+  "lkpd": {"judul":"...", "petunjuk":"...", "langkah":["langkah 1","2","3"], "soalAsesmen":["soal 1","2","3"], "kunciJawaban":["kunci jawaban soal 1","kunci jawaban soal 2","kunci jawaban soal 3"]},
+  "rubrikFormatif": [{"aspek":"...", "kategori":["Perlu Bimbingan","Cukup","Baik","Sangat Baik"], "deskripsi":["...","...","...","..."]}],
+  "rubrikSumatif": [{"aspek":"...", "kategori":["Perlu Bimbingan","Cukup","Baik","Sangat Baik"], "deskripsi":["...","...","...","..."]}],
+  "kktp": {"metode":"deskripsikan metode penentuan KKTP (mis. rata-rata indikator)", "kriteria":["indikator pencapaian 1 dengan target skor/deskripsi","2","3"]},
+  "lembarRefleksi": ["3-5 pertanyaan refleksi metakognitif untuk siswa terkait topik ini, mis. apa yang sudah dipahami, kesulitan yang dihadapi, perasaan selama belajar, rencana perbaikan/tindak lanjut"]
+}
+Tentukan "praktikPedagogis" (pendekatan, model, metode) yang paling sesuai dengan Tujuan Pembelajaran dan topik. Jika guru memberi preferensi pada input Praktik Pedagogis, jadikan itu acuan utama; jika kosong, pilih sendiri model yang paling tepat secara pedagogis. Untuk setiap aktivitas pada kegiatanPembuka/kegiatanInti/kegiatanPenutup, isi "sintak" dengan nama tahapan sintak resmi dari "model" yang telah ditentukan di praktikPedagogis (contoh: PBL memiliki sintak Orientasi Peserta Didik pada Masalah, Mengorganisasikan Peserta Didik, Membimbing Penyelidikan, Mengembangkan dan Menyajikan Hasil Karya, Menganalisis dan Mengevaluasi Proses Pemecahan Masalah; PjBL memiliki sintak Penentuan Pertanyaan Mendasar, Mendesain Perencanaan Proyek, Menyusun Jadwal, Memonitor, Menguji Hasil, Evaluasi Pengalaman). Jika model yang dipilih merupakan gabungan lebih dari satu model, padukan/urutkan sintak dari model-model tersebut secara logis sepanjang kegiatan pembuka-inti-penutup.
+
+Kegiatan pembelajaran harus dirinci LANGKAH DEMI LANGKAH secara konkret dan operasional (apa yang benar-benar dilakukan guru dan siswa di setiap langkah, bukan kalimat umum). Kegiatan Pembuka berisi 3-5 langkah, Kegiatan Inti berisi 5-8 langkah, Kegiatan Penutup berisi 3-4 langkah. Setiap aktivitas diberi field "waktu" berupa perkiraan durasi singkat (mis. "5 menit"). Hitung "alokasiKegiatan" (pembuka, inti, penutup) berdasarkan total Alokasi Waktu yang diberikan guru, dengan proporsi wajar (pembuka dan penutup relatif singkat, inti paling lama), dan pastikan jumlah waktu seluruh aktivitas pada setiap bagian mendekati alokasi bagian tersebut.
+
+Untuk lkpd, "kunciJawaban" harus berjumlah sama dan berurutan sesuai dengan "soalAsesmen" (kunci jawaban untuk soal ke-n ada pada index ke-n). Untuk asesmenSumatif, ikuti KONFIGURASI SOAL yang ditentukan guru (Bentuk Soal, Jumlah Soal, Proporsi Tingkat Kesulitan) yang diberikan pada data isian — jangan menggunakan bentuk/jumlah lain. Jika Bentuk Soal "Pilihan Ganda", setiap butir wajib memiliki tepat 4 opsi (A-D) pada field "opsi", dan kunciJawabanSumatif berisi huruf opsi yang benar. Jika "Uraian" atau "Isian Singkat", field "opsi" boleh dikosongkan ([]) dan kunciJawabanSumatif berisi jawaban singkat. Jika "Campuran (Pilihan Ganda + Uraian)", padukan kedua jenis secara proporsional dalam satu daftar soalSumatif (sebagian item ber-opsi, sebagian tidak). Distribusikan field "tingkat" (Mudah/Sedang/Sukar) pada setiap butir sesuai Proporsi Tingkat Kesulitan yang dipilih guru. Semua soal harus konkret, siap pakai, dan mengukur TP yang telah disusun. "lembarRefleksi" berisi 3-5 pertanyaan refleksi metakognitif yang singkat dan mudah dijawab siswa terkait topik yang dipelajari.
+
+Pastikan TP berisi 2-3 butir, dan rubrik berisi 2 aspek saja. Jaga setiap teks ringkas dan padat karena akan dirender sebagai dokumen, namun kegiatan pembelajaran tetap harus rinci sesuai jumlah langkah yang diminta. Jangan menyertakan apapun selain JSON. JSON harus valid dan lengkap (tertutup sempurna) — ini sangat penting.`;
+
+  const userPrompt = `Data isian:
+Nama Guru: ${data.namaGuru}
+Nama Sekolah: ${data.namaSekolah}
+Mata Pelajaran: ${data.mapel}
+Jenjang: ${data.jenjang}
+Kelas: ${data.kelas}
+Fase: ${data.fase}
+Semester: ${data.semester}
+Alokasi Waktu: ${data.alokasiWaktu}
+Topik Pembelajaran: ${data.topik}
+CP (jika diisi guru): ${data.cp || '(kosong, mohon disusun)'}
+TP (jika diisi guru): ${data.tp || '(kosong, mohon disusun)'}
+Dimensi Profil Lulusan terpilih: ${data.dimensi.join(', ')}
+Praktik Pedagogis (preferensi guru, opsional): ${data.praktik || '(tidak ada, mohon ditentukan sendiri sesuai TP dan topik)'}
+Kemitraan: ${data.kemitraan || '(tidak ada)'}
+
+Konfigurasi Soal Asesmen Sumatif (WAJIB diikuti):
+Bentuk Soal: ${data.bentukSoalSumatif}
+Jumlah Soal: ${data.jumlahSoalSumatif}
+Proporsi Tingkat Kesulitan: ${data.tingkatKesulitanSumatif}
+
+Susun isi modul ajar sesuai struktur JSON yang telah ditentukan.`;
+
+  runGeneration(data, systemPrompt, userPrompt);
+}
+
+async function callClaudeAndParse(systemPrompt, userPrompt, attempt){
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 8000,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userPrompt }]
+    })
+  });
+  const result = await response.json();
+  let text = (result.content || []).map(b => b.text || '').join('');
+  text = text.trim().replace(/^```json/i,'').replace(/^```/,'').replace(/```$/,'').trim();
+
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch (e) {
+    const repaired = repairTruncatedJSON(text);
+    if (repaired) {
+      try { parsed = JSON.parse(repaired); } catch (e2) { parsed = null; }
+    }
+  }
+
+  const isComplete = parsed && parsed.praktikPedagogis && parsed.praktikPedagogis.model
+    && parsed.alokasiKegiatan && parsed.alokasiKegiatan.penutup
+    && parsed.kegiatanPenutup && parsed.kegiatanPenutup.length
+    && parsed.asesmenSumatif && parsed.asesmenSumatif.teknik
+    && parsed.asesmenSumatif.soalSumatif && parsed.asesmenSumatif.soalSumatif.length
+    && parsed.asesmenSumatif.kunciJawabanSumatif && parsed.asesmenSumatif.kunciJawabanSumatif.length
+    && parsed.lkpd && parsed.lkpd.judul
+    && parsed.lkpd.kunciJawaban && parsed.lkpd.kunciJawaban.length
+    && parsed.rubrikSumatif && parsed.rubrikSumatif.length
+    && parsed.bahanAjar && parsed.bahanAjar.length
+    && parsed.mediaPembelajaran && parsed.mediaPembelajaran.length
+    && parsed.kktp && parsed.kktp.kriteria && parsed.kktp.kriteria.length
+    && parsed.lembarRefleksi && parsed.lembarRefleksi.length;
+
+  if (parsed && isComplete) {
+    return parsed;
+  } else {
+    if (attempt < 2) {
+      return callClaudeAndParse(systemPrompt, userPrompt + "\n\nPENTING: jawaban sebelumnya terpotong sebelum bagian Asesmen Sumatif/Lampiran (LKPD, rubrik, KKTP). Pastikan SELURUH field terisi dan JSON tertutup sempurna. Buat setiap teks lebih singkat agar muat.", attempt + 1);
+    }
+    if (parsed) return parsed; // tampilkan apa adanya daripada error total
+    throw new Error('Respons AI tidak lengkap setelah beberapa percobaan. Coba klik "Hasilkan Modul Ajar" lagi.');
+  }
+}
+
+function repairTruncatedJSON(text){
+  // Potong di tanda kutip terakhir yang valid, lalu tutup kurung kurawal/siku yang masih terbuka
+  let lastGoodComma = Math.max(text.lastIndexOf('",'), text.lastIndexOf('],'), text.lastIndexOf('},'));
+  if (lastGoodComma < 0) return null;
+  let trimmed = text.slice(0, lastGoodComma + 1);
+  // Hapus koma trailing terakhir
+  trimmed = trimmed.replace(/,\s*$/, '');
+  let open = 0, openSq = 0;
+  for (const ch of trimmed) {
+    if (ch === '{') open++;
+    if (ch === '}') open--;
+    if (ch === '[') openSq++;
+    if (ch === ']') openSq--;
+  }
+  let closer = '';
+  for (let i = 0; i < openSq; i++) closer += ']';
+  for (let i = 0; i < open; i++) closer += '}';
+  return trimmed + closer;
+}
+
+async function runGeneration(data, systemPrompt, userPrompt){
+  try {
+    const ai = await callClaudeAndParse(systemPrompt, userPrompt, 0);
+    document.getElementById('statusBox').innerHTML = '<div class="status"><div class="spinner"></div> Menulis Materi Pembelajaran lengkap (2-4 halaman)...</div>';
+    const materiHTML = await fetchMateriPembelajaran(data, ai, 0);
+    finalizeRender(data, ai, materiHTML);
+  } catch (err) {
+    console.error(err);
+    document.getElementById('errorBox').innerHTML = `<div class="error-box">Terjadi kesalahan saat menghasilkan modul. Coba tekan "Hasilkan Modul Ajar" sekali lagi. (${(err && err.message) || 'unknown error'})</div>`;
+  } finally {
+    setLoading(false);
+    document.getElementById('btnRegen').disabled = false;
+  }
+}
+
+async function fetchMateriPembelajaran(data, ai, attempt){
+  const sys = `Anda adalah penulis bahan ajar profesional untuk guru ${data.jenjang} Indonesia. Tulis MATERI PEMBELAJARAN yang lengkap dan siap pakai di kelas untuk topik yang diberikan, sepanjang kira-kira 2-4 halaman (cukup panjang dan substantif, bukan ringkasan singkat). Materi harus mencakup: penjelasan konsep secara bertahap dari yang mendasar ke yang lebih kompleks, minimal 2 contoh konkret/ilustrasi/kasus nyata yang relevan dengan kehidupan siswa, dan jika relevan sertakan ilustrasi berupa deskripsi gambar/diagram sederhana dalam bentuk teks (karena tidak bisa menyisipkan gambar asli). Gunakan bahasa Indonesia baku yang sesuai dengan jenjang ${data.jenjang} kelas ${data.kelas}. 
+
+Format output HANYA berupa fragmen HTML sederhana (tanpa tag <html>, <head>, atau <body>), gunakan HANYA tag-tag ini: <h5> untuk sub-judul bagian materi, <p> untuk paragraf, <ul>/<li> untuk daftar/contoh, <strong> untuk penekanan. Jangan gunakan markdown, jangan gunakan backtick, jangan beri pembuka/penutup di luar tag HTML tersebut.`;
+
+  const user = `Mata Pelajaran: ${data.mapel}
+Jenjang/Kelas/Fase: ${data.jenjang} / Kelas ${data.kelas} / ${data.fase}
+Topik Pembelajaran: ${data.topik}
+Capaian Pembelajaran: ${ai.cp || '-'}
+Tujuan Pembelajaran:
+${(ai.tp || []).map((t,i)=>`${i+1}. ${t}`).join('\n')}
+
+Tulis materi pembelajaran lengkap (2-4 halaman) sesuai instruksi di atas.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 4000,
+        system: sys,
+        messages: [{ role: "user", content: user }]
+      })
+    });
+    const result = await response.json();
+    let text = (result.content || []).map(b => b.text || '').join('');
+    text = text.trim().replace(/^```html/i,'').replace(/^```/,'').replace(/```$/,'').trim();
+    if (!text || text.length < 200) {
+      if (attempt < 1) return fetchMateriPembelajaran(data, ai, attempt + 1);
+      return '<p><em>Materi pembelajaran belum berhasil dihasilkan. Silakan tekan "Hasilkan Ulang".</em></p>';
+    }
+    return text;
+  } catch (e) {
+    if (attempt < 1) return fetchMateriPembelajaran(data, ai, attempt + 1);
+    return '<p><em>Materi pembelajaran belum berhasil dihasilkan. Silakan tekan "Hasilkan Ulang".</em></p>';
+  }
+}
+
+function esc(s){
+  return (s || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function listItems(arr){
+  return (arr||[]).map(x => `<li>${esc(x)}</li>`).join('');
+}
+
+function activityRows(arr, counter){
+  return (arr||[]).map((a,i) => {
+    const label = a.sintak ? `<strong>Sintak: ${esc(a.sintak)}</strong> — ` : '';
+    return `<tr><td style="width:30px;text-align:center">${i+1}</td><td>${label}${esc(a.aktivitas)}</td><td style="width:70px;text-align:center">${esc(a.waktu)}</td><td>${esc(a.tahap)}</td><td>${esc(a.prinsip)}</td></tr>`;
+  }).join('');
+}
+
+function rubrikTable(rubrik){
+  if (!rubrik || !rubrik.length) return '';
+  let rows = rubrik.map(r => `<tr><td><strong>${esc(r.aspek)}</strong></td>${(r.deskripsi||[]).map(d=>`<td>${esc(d)}</td>`).join('')}</tr>`).join('');
+  const kategori = (rubrik[0].kategori || ['Perlu Bimbingan','Cukup','Baik','Sangat Baik']);
+  return `<table class="gridtable"><tr><th>Aspek</th>${kategori.map(k=>`<th>${esc(k)}</th>`).join('')}</tr>${rows}</table>`;
+}
+
+function numberedTable(arr, headerLabel){
+  const items = arr || [];
+  const rows = items.map((x,i) => `<tr><td style="width:36px;text-align:center">${i+1}</td><td>${esc(x)}</td></tr>`).join('');
+  return `<table class="gridtable"><tr><th style="width:36px;text-align:center">No</th><th>${esc(headerLabel)}</th></tr>${rows}</table>`;
+}
+
+function infoTable(rows){
+  // rows: array of [label, value]
+  const body = rows.filter(r => r[1] !== undefined && r[1] !== null && r[1] !== '')
+    .map(r => `<tr><td style="width:200px;background:var(--clay-soft);font-weight:600">${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('');
+  return `<table class="gridtable">${body}</table>`;
+}
+
+function numberedLabelTable(rows){
+  // rows: array of [label, value] -> tabel bernomor dengan format "No | Label: Nilai"
+  const filtered = rows.filter(r => r[1] !== undefined && r[1] !== null && r[1] !== '');
+  const body = filtered.map((r,i) => `<tr><td style="width:36px;text-align:center">${i+1}</td><td><strong>${esc(r[0])}</strong>: ${esc(r[1])}</td></tr>`).join('');
+  return `<table class="gridtable"><tr><th style="width:36px;text-align:center">No</th><th>Keterangan</th></tr>${body}</table>`;
+}
+
+function soalKunciTable(soal, kunci){
+  const soalArr = soal || [];
+  const kunciArr = kunci || [];
+  const rows = soalArr.map((s,i) => `<tr><td style="width:36px;text-align:center">${i+1}</td><td>${esc(s)}</td><td>${esc(kunciArr[i] || '')}</td></tr>`).join('');
+  return `<table class="gridtable"><tr><th style="width:36px;text-align:center">No</th><th>Soal</th><th>Kunci Jawaban</th></tr>${rows}</table>`;
+}
+
+function soalSumatifTable(soalArr, kunciArr){
+  const items = soalArr || [];
+  const kunci = kunciArr || [];
+  const rows = items.map((item, i) => {
+    const teks = typeof item === 'string' ? item : item.soal;
+    const tingkat = typeof item === 'object' ? item.tingkat : '';
+    const opsi = (typeof item === 'object' && Array.isArray(item.opsi)) ? item.opsi : [];
+    const opsiHtml = opsi.length ? `<ul style="margin:6px 0 0 18px">${opsi.map(o=>`<li>${esc(o)}</li>`).join('')}</ul>` : '';
+    return `<tr><td style="width:36px;text-align:center">${i+1}</td><td>${esc(teks)}${opsiHtml}</td><td style="width:70px;text-align:center">${esc(tingkat)}</td><td style="width:120px">${esc(kunci[i] || '')}</td></tr>`;
+  }).join('');
+  return `<table class="gridtable"><tr><th style="width:36px;text-align:center">No</th><th>Soal</th><th style="width:70px">Tingkat</th><th style="width:120px">Kunci Jawaban</th></tr>${rows}</table>`;
+}
+
+function blankLines(n){
+  let out = '';
+  for (let i = 0; i < (n || 3); i++){
+    out += `<div style="border-bottom:1px solid #888;height:24px;margin-bottom:6px;">&nbsp;</div>`;
+  }
+  return out;
+}
+
+function blankLineInline(){
+  return `<span style="display:inline-block;border-bottom:1px solid #888;min-width:220px;height:18px;">&nbsp;</span>`;
+}
+
+function printableQuestionTable(items, lineCount){
+  const arr = items || [];
+  const rows = arr.map((s,i) => `<tr><td style="width:36px;text-align:center;vertical-align:top">${i+1}</td><td style="vertical-align:top">${esc(s)}<div style="margin-top:8px">${blankLines(lineCount || 2)}</div></td></tr>`).join('');
+  return `<table class="gridtable"><tr><th style="width:36px;text-align:center">No</th><th>Pertanyaan / Jawaban</th></tr>${rows}</table>`;
+}
+
+function buildModulHTML(data, ai){
+  const sintakCounter = { n: 0 };
+  return `
+  <div id="doc">
+    <h2 class="doctitle">Modul Ajar</h2>
+    <div class="docsub">Pembelajaran Mendalam &middot; ${esc(data.topik)}</div>
+
+    <h3>Identitas Umum</h3>
+    <table class="identity">
+      <tr><td class="k">Nama Guru</td><td>: ${esc(data.namaGuru)}</td></tr>
+      <tr><td class="k">Nama Sekolah</td><td>: ${esc(data.namaSekolah)}</td></tr>
+      <tr><td class="k">Mata Pelajaran</td><td>: ${esc(data.mapel)}</td></tr>
+      <tr><td class="k">Jenjang</td><td>: ${esc(data.jenjang)}</td></tr>
+      <tr><td class="k">Kelas</td><td>: ${esc(data.kelas)}</td></tr>
+      <tr><td class="k">Fase</td><td>: ${esc(data.fase)}</td></tr>
+      <tr><td class="k">Semester</td><td>: ${esc(data.semester)}</td></tr>
+      <tr><td class="k">Alokasi Waktu</td><td>: ${esc(data.alokasiWaktu)}</td></tr>
+      <tr><td class="k">Topik Pembelajaran</td><td>: ${esc(data.topik)}</td></tr>
+    </table>
+
+    <h3>Identifikasi</h3>
+    <h4>Capaian Pembelajaran (CP)</h4>
+    <table class="gridtable"><tr><td>${esc(ai.cp)}</td></tr></table>
+    <h4>Tujuan Pembelajaran (TP)</h4>
+    ${numberedTable(ai.tp, 'Tujuan Pembelajaran')}
+    <h4>Dimensi Profil Lulusan</h4>
+    ${numberedTable(data.dimensi, 'Dimensi Profil Lulusan')}
+
+    <h3>Desain Pembelajaran</h3>
+    <h4>Praktik Pedagogis</h4>
+    ${numberedLabelTable([
+      ['Pendekatan Pembelajaran', ai.praktikPedagogis && ai.praktikPedagogis.pendekatan],
+      ['Model Pembelajaran', ai.praktikPedagogis && ai.praktikPedagogis.model],
+      ['Metode Pembelajaran', ai.praktikPedagogis && ai.praktikPedagogis.metode]
+    ])}
+    ${infoTable([
+      ['Kemitraan', data.kemitraan || 'Tidak ada kemitraan eksternal pada pembelajaran ini.'],
+      ['Lingkungan Pembelajaran', ai.lingkunganPembelajaran],
+      ['Pemanfaatan Digital', ai.pemanfaatanDigital],
+      ['Lintas Disiplin Ilmu', ai.lintasDisiplinIlmu]
+    ])}
+
+    <h3>Pengalaman Belajar</h3>
+    <p class="helptext" style="margin-bottom:10px">Setiap aktivitas diawali label "Sintak" sesuai tahapan model/metode pembelajaran (Praktik Pedagogis) yang digunakan. Kolom "Tahap" mengacu pada alur Memahami &rarr; Mengaplikasi &rarr; Merefleksi. Kolom "Prinsip" mengacu pada prinsip pembelajaran mendalam: berkesadaran (mindful), bermakna (meaningful), menggembirakan (joyful).</p>
+    <h4>Kegiatan Pembuka <span class="helptext" style="font-weight:400">(Alokasi: ${esc(ai.alokasiKegiatan && ai.alokasiKegiatan.pembuka)})</span></h4>
+    <table class="gridtable"><tr><th>No</th><th>Aktivitas</th><th>Waktu</th><th>Tahap</th><th>Prinsip</th></tr>${activityRows(ai.kegiatanPembuka, sintakCounter)}</table>
+    <h4>Kegiatan Inti <span class="helptext" style="font-weight:400">(Alokasi: ${esc(ai.alokasiKegiatan && ai.alokasiKegiatan.inti)})</span></h4>
+    <table class="gridtable"><tr><th>No</th><th>Aktivitas</th><th>Waktu</th><th>Tahap</th><th>Prinsip</th></tr>${activityRows(ai.kegiatanInti, sintakCounter)}</table>
+    <h4>Kegiatan Penutup <span class="helptext" style="font-weight:400">(Alokasi: ${esc(ai.alokasiKegiatan && ai.alokasiKegiatan.penutup)})</span></h4>
+    <table class="gridtable"><tr><th>No</th><th>Aktivitas</th><th>Waktu</th><th>Tahap</th><th>Prinsip</th></tr>${activityRows(ai.kegiatanPenutup, sintakCounter)}</table>
+
+    <h3>Asesmen Pembelajaran</h3>
+    <h4>Asesmen Awal</h4>
+    ${infoTable([['Teknik', ai.asesmenAwal && ai.asesmenAwal.teknik]])}
+    ${numberedTable(ai.asesmenAwal && ai.asesmenAwal.instrumenSingkat, 'Instrumen / Pertanyaan Diagnostik')}
+    <h4>Asesmen Proses</h4>
+    ${infoTable([
+      ['Teknik', ai.asesmenFormatif && ai.asesmenFormatif.teknik],
+      ['Instrumen', ai.asesmenFormatif && ai.asesmenFormatif.instrumen]
+    ])}
+    <h4>Asesmen Akhir</h4>
+    ${infoTable([
+      ['Teknik', ai.asesmenSumatif && ai.asesmenSumatif.teknik],
+      ['Instrumen', ai.asesmenSumatif && ai.asesmenSumatif.instrumen],
+      ['Bentuk Soal', ai.asesmenSumatif && ai.asesmenSumatif.bentukSoal]
+    ])}
+    <h4>Konversi Nilai</h4>
+    <table class="gridtable"><tr><td>${esc(ai.konversiNilai)}</td></tr></table>
+
+    <h3>Lampiran</h3>
+    <table class="gridtable"><tr><td>Materi Pembelajaran, Bahan Ajar, Media Pembelajaran, LKPD lengkap beserta kunci jawaban, dan seluruh instrumen Asesmen (Rubrik Formatif/Sumatif &amp; KKTP) disusun secara lengkap pada dokumen terpisah <strong>"Lampiran Lengkap"</strong> — lihat tab atau file unduhan Lampiran.</td></tr></table>
+
+    <h3>Pengesahan</h3>
+    <table class="signtable">
+      <tr>
+        <td style="text-align:center;width:50%">Mengetahui,<br>Kepala Sekolah</td>
+        <td style="text-align:center;width:50%">${esc(data.namaSekolah)}, ____________ 20___<br>Guru Mata Pelajaran</td>
+      </tr>
+      <tr><td style="height:70px">&nbsp;</td><td style="height:70px">&nbsp;</td></tr>
+      <tr>
+        <td style="text-align:center;font-weight:700">${esc(data.namaKepsek)}${data.nipKepsek ? `<br><span style="font-weight:400">NIP. ${esc(data.nipKepsek)}</span>` : ''}</td>
+        <td style="text-align:center;font-weight:700">${esc(data.namaGuru)}${data.nipGuru ? `<br><span style="font-weight:400">NIP. ${esc(data.nipGuru)}</span>` : ''}</td>
+      </tr>
+    </table>
+  </div>`;
+}
+
+function buildLampiranHTML(data, ai, materiHTML){
+  return `
+  <div id="doc">
+    <h2 class="doctitle">Lampiran Modul Ajar</h2>
+    <div class="docsub">Materi Pembelajaran &middot; LKPD &middot; Asesmen &middot; ${esc(data.topik)}</div>
+
+    <table class="identity">
+      <tr><td class="k">Nama Guru</td><td>: ${esc(data.namaGuru)}</td></tr>
+      <tr><td class="k">Mata Pelajaran</td><td>: ${esc(data.mapel)}</td></tr>
+      <tr><td class="k">Kelas / Fase</td><td>: ${esc(data.kelas)} / ${esc(data.fase)}</td></tr>
+      <tr><td class="k">Topik Pembelajaran</td><td>: ${esc(data.topik)}</td></tr>
+    </table>
+
+    <h3>Materi Pembelajaran</h3>
+    <div class="materi-content">${materiHTML}</div>
+
+    <h3>Bahan Ajar &amp; Media Pembelajaran</h3>
+    <h4>Bahan Ajar</h4>
+    ${numberedTable(ai.bahanAjar, 'Bahan Ajar')}
+    <h4>Media Pembelajaran</h4>
+    ${numberedTable(ai.mediaPembelajaran, 'Media Pembelajaran')}
+
+    <h3>LKPD (Lembar Kerja Peserta Didik)</h3>
+    ${infoTable([
+      ['Judul LKPD', ai.lkpd && ai.lkpd.judul],
+      ['Petunjuk', ai.lkpd && ai.lkpd.petunjuk]
+    ])}
+    <p class="helptext" style="margin:10px 0 4px">Langkah Kerja</p>
+    ${numberedTable(ai.lkpd && ai.lkpd.langkah, 'Langkah Kerja')}
+    <p class="helptext" style="margin:10px 0 4px">Soal Asesmen &amp; Kunci Jawaban</p>
+    ${soalKunciTable(ai.lkpd && ai.lkpd.soalAsesmen, ai.lkpd && ai.lkpd.kunciJawaban)}
+
+    <h3>LKPD Siap Cetak (Versi Siswa)</h3>
+    <p class="helptext" style="margin-bottom:10px">Halaman ini dirancang untuk langsung dicetak dan dibagikan ke siswa, dilengkapi kolom isian jawaban. Tidak memuat kunci jawaban.</p>
+    <table class="identity">
+      <tr><td class="k">Nama Siswa</td><td>: ${blankLineInline()}</td></tr>
+      <tr><td class="k">Kelas</td><td>: ${esc(data.kelas)}</td></tr>
+      <tr><td class="k">Tanggal</td><td>: ${blankLineInline()}</td></tr>
+    </table>
+    ${infoTable([
+      ['Judul LKPD', ai.lkpd && ai.lkpd.judul],
+      ['Petunjuk', ai.lkpd && ai.lkpd.petunjuk]
+    ])}
+    <p class="helptext" style="margin:10px 0 4px">Langkah Kerja</p>
+    ${numberedTable(ai.lkpd && ai.lkpd.langkah, 'Langkah Kerja')}
+    <p class="helptext" style="margin:10px 0 4px">Soal &amp; Kolom Jawaban</p>
+    ${printableQuestionTable(ai.lkpd && ai.lkpd.soalAsesmen, 3)}
+
+    <h3>Instrumen Asesmen</h3>
+    <h4>Soal Asesmen Sumatif &amp; Kunci Jawaban</h4>
+    ${infoTable([['Bentuk Soal', ai.asesmenSumatif && ai.asesmenSumatif.bentukSoal]])}
+    ${soalSumatifTable(ai.asesmenSumatif && ai.asesmenSumatif.soalSumatif, ai.asesmenSumatif && ai.asesmenSumatif.kunciJawabanSumatif)}
+    <h4>Rubrik Penilaian Formatif</h4>
+    ${rubrikTable(ai.rubrikFormatif)}
+    <h4>Rubrik Penilaian Sumatif</h4>
+    ${rubrikTable(ai.rubrikSumatif)}
+    <h4>Kriteria Ketercapaian Tujuan Pembelajaran (KKTP)</h4>
+    ${infoTable([['Metode', ai.kktp && ai.kktp.metode]])}
+    ${numberedTable(ai.kktp && ai.kktp.kriteria, 'Kriteria / Indikator Pencapaian')}
+
+    <h3>Lembar Refleksi Siswa</h3>
+    <p class="helptext" style="margin-bottom:10px">Diisi oleh siswa secara individu setelah pembelajaran selesai, sebagai bagian dari prinsip "Merefleksi" dalam pembelajaran mendalam.</p>
+    <table class="identity">
+      <tr><td class="k">Nama Siswa</td><td>: ${blankLineInline()}</td></tr>
+      <tr><td class="k">Kelas</td><td>: ${esc(data.kelas)}</td></tr>
+      <tr><td class="k">Tanggal</td><td>: ${blankLineInline()}</td></tr>
+    </table>
+    ${printableQuestionTable(ai.lembarRefleksi, 3)}
+  </div>`;
+}
+
+function finalizeRender(data, ai, materiHTML){
+  lastTitleModul = `Modul Ajar - ${data.topik}`;
+  lastTitleLampiran = `Lampiran Modul Ajar - ${data.topik}`;
+  lastModulHTML = buildModulHTML(data, ai);
+  lastLampiranHTML = buildLampiranHTML(data, ai, materiHTML);
+
+  document.getElementById('docTabs').classList.add('show');
+  switchTab('modul');
+
+  document.getElementById('btnPrint').disabled = false;
+  document.getElementById('btnWordModul').disabled = false;
+  document.getElementById('btnWordLampiran').disabled = false;
+  document.getElementById('btnWordGabungan').disabled = false;
+  document.getElementById('resultWrap').scrollIntoView({behavior:'smooth'});
+}
+
+function switchTab(tab){
+  activeTab = tab;
+  document.querySelectorAll('.tabbtn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.getElementById('resultWrap').innerHTML = tab === 'modul' ? lastModulHTML : lastLampiranHTML;
+}
+
+function wordDocShell(title, bodyHtml){
+  return `
+  <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+  <head><meta charset="utf-8"><title>${esc(title)}</title>
+  <style>
+    body{font-family:Calibri,Arial,sans-serif;font-size:11pt;}
+    h2{text-align:center;text-transform:uppercase;}
+    .docsub{text-align:center;color:#a8633c;text-transform:uppercase;font-size:9pt;letter-spacing:1px;margin-bottom:20px;}
+    h3{background:#3c5a45;color:#fff;padding:5px 10px;text-transform:uppercase;font-size:11pt;}
+    h4{border-bottom:1px solid #ccc;padding-bottom:3px;}
+    h5{color:#a8633c;text-transform:uppercase;font-size:10.5pt;margin:14px 0 4px;}
+    table{border-collapse:collapse;width:100%;margin-bottom:10px;}
+    table.gridtable{border:1px solid #999;}
+    table.gridtable th, table.gridtable td{border:1px solid #999;padding:5px 8px;vertical-align:top;}
+    table.gridtable th{background:#f0e2d4;}
+    table.identity td{padding:4px 8px;}
+    .signtable{width:100%;margin-top:30px;border:none;}
+    .signtable td{border:none;padding:4px 10px;vertical-align:top;}
+    .pagebreak{page-break-before:always;mso-special-character:line-break;}
+  </style></head>
+  <body>${bodyHtml}</body></html>`;
+}
+
+function triggerDocDownload(title, bodyHtml){
+  const fullHtml = wordDocShell(title, bodyHtml);
+  const blob = new Blob(['\ufeff', fullHtml], { type: 'application/msword' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${title.replace(/[^a-z0-9 \-]/gi,'')}.doc`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function downloadWord(which){
+  if (!lastModulHTML || !lastLampiranHTML) return;
+  if (which === 'modul') {
+    triggerDocDownload(lastTitleModul, lastModulHTML);
+  } else if (which === 'lampiran') {
+    triggerDocDownload(lastTitleLampiran, lastLampiranHTML);
+  } else {
+    const combined = lastModulHTML + `<div class="pagebreak">&nbsp;</div>` + lastLampiranHTML;
+    triggerDocDownload(`Modul Ajar dan Lampiran - ${lastTitleModul.replace('Modul Ajar - ','')}`, combined);
+  }
+}
+</script>
+
+</body>
+</html>
